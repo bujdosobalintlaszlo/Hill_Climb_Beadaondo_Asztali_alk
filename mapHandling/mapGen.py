@@ -7,7 +7,7 @@ import os
 instance_count = 0
 map_size = 0
 min_height, max_height = 0, 150
-
+map_counter = 1
 def get_valid_int_input(prompt, min_value=None, max_value=None):
     while True:
         try:
@@ -24,5 +24,26 @@ def initialize_inputs():
     instance_count = get_valid_int_input('Hány map generálódjon?', 1, None)
     map_size = get_valid_int_input('Add meg a pályaméretet (min.: 10, max.: 100)', 10, 100)
 
+
+def generate_maps():
+    for i in range(instance_count):
+        map = np.random.randint(min_height,max_height+1,(map_size,map_size))
+        sigma = 2
+        smoothed_map = gaussian_filter(map,sigma=sigma)
+        write_into_file(smoothed_map)
+        map_counter+=1
+def write_into_file(smoothed_map):
+    file_name = f'/maps/map{map_counter}.txt'
+    with open(file_name,'w') as f:
+        max_heights = CheckMultipleMaxes(smoothed_map)
+        f.write(f'{", ".join(map(str,max_heights.astype(int)))}\n')
+        for row in smoothed_map:
+            f.write(' '.join(map(str,row.astype(int))) + '\n')
+    print(f'Kész a(z) {map_counter}/{instance_count} map')
+def CheckMultipleMaxes(smoothed_map):
+    flattened_map = smoothed_map.flatten()
+    max_val = flattened_map.max()
+    return flattened_map[flattened_map == max_val]
 initialize_inputs()
+
 
