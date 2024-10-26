@@ -37,7 +37,6 @@ def setup_3d_image(terrain_map):
     y = np.arange(rows)
     x, y = np.meshgrid(x, y)
 
-    # Create the 3D plot
     fig = plt.figure(figsize=(10, 8))
     ax = fig.add_subplot(111, projection='3d')
     ax.plot_surface(x, y, terrain_map, cmap='terrain', edgecolor='none')
