@@ -42,6 +42,7 @@ def write_into_file(smoothed_map):
         for row in smoothed_map:
             f.write(' '.join(map(str, row.astype(int))) + '\n')
     print(f'Kész a(z) {map_counter}/{instance_count} map')
+    print('Ha vissza szeretnél lépni zárd nyomj egy ENTER-t...')
 
 def CheckMultipleMaxes(smoothed_map):
     flattened_map = smoothed_map.flatten()

@@ -21,9 +21,11 @@ def read_map(map_name):
     global map_data, max_peek
     with open(map_name, 'r') as f:
         first_line = next(f).strip()
-        max_peek = int(first_line.split()[0])
+        max_peek = int(''.join(filter(str.isdigit, first_line.split()[0])))
         map_data = [list(map(int, line.split())) for line in f]
     print("Map adat sikeresen beolvasva.")
+    print('Ha vissza szeretnél lépni zárd be a 3d-s megjelenítést és nyomj egy ENTER-t...')
+
 
 def display_image():
     global map_data
@@ -48,4 +50,5 @@ def setup_3d_image(terrain_map):
 
 check_if_valid_map()
 display_image()
+
 
