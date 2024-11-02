@@ -12,20 +12,30 @@ max_peek = 0
 
 def check_if_valid_map():
     global map_name
-    while not os.path.isfile(f'maps/{map_name}.txt'):
+    map_name = "map1"  # Hardcode to a known existing map for testing
+    maps_dir = os.path.join(os.path.dirname(__file__), 'maps')
+    full_path = os.path.join(maps_dir, f'{map_name}.txt')
+    print(f'Checking path: {full_path}')  # Debugging output
+    
+    if os.path.isfile(full_path):
+        read_map(full_path)
+    else:
         print("A megadott map fájl nem létezik.")
-        map_name = input("Add meg a map nevét (NEM KELL A *.txt): ")
-    read_map(f'maps/{map_name}.txt')
+
+
 
 def read_map(map_name):
     global map_data, max_peek
-    with open(map_name, 'r') as f:
-        first_line = next(f).strip()
-        max_peek = int(''.join(filter(str.isdigit, first_line.split()[0])))
-        map_data = [list(map(int, line.split())) for line in f]
-    print("Map adat sikeresen beolvasva.")
-    print('Ha vissza szeretnél lépni zárd be a 3d-s megjelenítést és nyomj egy ENTER-t...')
-
+    try:
+        with open(map_name, 'r') as f:
+            first_line = next(f).strip()
+            max_peek = int(''.join(filter(str.isdigit, first_line.split()[0])))
+            map_data = [list(map(int, line.split())) for line in f]
+        print("Map adat sikeresen beolvasva.")
+    except FileNotFoundError:
+        print(f"A fájl nem található: {map_name}")
+    except Exception as e:
+        print(f"Hiba történt a fájl beolvasásakor: {e}")
 
 def display_image():
     global map_data
@@ -48,7 +58,11 @@ def setup_3d_image(terrain_map):
 
     plt.show()
 
+# Debugging: Print the current working directory
+print("Current working directory:", os.getcwd())
+
 check_if_valid_map()
 display_image()
+
 
 

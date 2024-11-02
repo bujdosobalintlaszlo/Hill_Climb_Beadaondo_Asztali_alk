@@ -43,6 +43,7 @@ class MenuFrame(Frame):
             subprocess.run(["python", "algo/hillClimb.py"])
         elif selected == 4:
             subprocess.run(["python", "mapHandling/displayResult.py"])
+        print('')
         self.screen.clear()
         self.screen.refresh()
         self.fix()

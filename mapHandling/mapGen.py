@@ -32,17 +32,40 @@ def generate_maps():
         write_into_file(smoothed_map)
         map_counter += 1
 
+import os
+
+map_counter = 1  # Example variable for map counter
+instance_count = 10  # Example variable for instance count
+
 def write_into_file(smoothed_map):
     global map_counter
-    file_name = f'maps/map{map_counter}.txt'
-    os.makedirs('maps', exist_ok=True)
+
+    # Get the path of the current script's directory
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+
+    # Define the path to the maps folder relative to the script directory
+    maps_folder = os.path.join(script_dir, 'maps')
+
+    # Ensure the maps folder exists
+    os.makedirs(maps_folder, exist_ok=True)
+
+    # Define the file name in the maps folder
+    file_name = os.path.join(maps_folder, f'map{map_counter}.txt')
+
     with open(file_name, 'w') as f:
+        # Assuming CheckMultipleMaxes is defined somewhere else
         max_heights = CheckMultipleMaxes(smoothed_map)
         f.write(f'{", ".join(map(str, max_heights.astype(int)))}\n')
         for row in smoothed_map:
             f.write(' '.join(map(str, row.astype(int))) + '\n')
+
     print(f'Kész a(z) {map_counter}/{instance_count} map')
     print('Ha vissza szeretnél lépni zárd nyomj egy ENTER-t...')
+
+# Example usage
+smoothed_map = ...  # Your smoothed_map logic here
+write_into_file(smoothed_map)
+
 
 def CheckMultipleMaxes(smoothed_map):
     flattened_map = smoothed_map.flatten()
