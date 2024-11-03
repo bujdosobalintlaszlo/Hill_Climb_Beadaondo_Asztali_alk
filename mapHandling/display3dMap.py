@@ -4,7 +4,6 @@ from mpl_toolkits.mplot3d import Axes3D
 from scipy.ndimage import gaussian_filter
 import os
 
-# Global variables
 map_data = []
 map_name = input("Add meg a map nevét (NEM KELL A *.txt): ")
 rows, cols = 30, 30
@@ -16,7 +15,6 @@ def check_if_valid_map():
     global map_name
     maps_dir = os.path.join(os.path.dirname(__file__), 'maps')
     map_file_path = os.path.join(maps_dir, f'{map_name}.txt')
-    print(f'Checking path: {map_file_path}')
 
     if os.path.isfile(map_file_path):
         read_map(map_file_path)
@@ -32,11 +30,11 @@ def read_map(file_path):
             max_peek = int(''.join(filter(str.isdigit, first_line.split()[0])))
             map_data = [list(map(int, line.split())) for line in f]
 
-            # Check if map_data is empty after reading
             if not map_data:
                 raise ValueError("A megadott fájl üres.")
 
             print("Map adat sikeresen beolvasva.")
+            input('Ha vissza szeretnél lépni zárd nyomj egy ENTER-t...')
     except FileNotFoundError:
         print(f"A fájl nem található: {file_path}")
     except ValueError as ve:
@@ -48,13 +46,12 @@ def display_image():
     """Display the terrain map as a 3D surface plot."""
     global map_data
     terrain_map = np.array(map_data)
-    
-    # Ensure terrain_map is 2D
+
     if terrain_map.ndim != 2:
         print("A terep térkép nem 2D.")
         return
 
-    sigma = 2  # Gaussian filter standard deviation
+    sigma = 2 
     smoothed_terrain_map = gaussian_filter(terrain_map, sigma=sigma)
     setup_3d_image(smoothed_terrain_map)
 
@@ -73,9 +70,7 @@ def setup_3d_image(terrain_map):
 
     plt.show()
 
-# Main execution
 check_if_valid_map()
 
 if map_data:
     display_image()
-
