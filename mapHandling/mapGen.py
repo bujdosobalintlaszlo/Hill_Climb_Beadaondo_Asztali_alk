@@ -2,7 +2,6 @@ import numpy as np
 from scipy.ndimage import gaussian_filter
 import os
 
-# Initialize global variables
 instance_count = 0
 map_size = 0
 min_height, max_height = 0, 150
@@ -31,13 +30,9 @@ def generate_maps():
         write_into_file(smoothed_map, map_counter)
 
 def write_into_file(smoothed_map, map_counter):
-    # Get the path of the current script's directory
     script_dir = os.path.dirname(os.path.abspath(__file__))
-    # Define the path to the maps folder relative to the script directory
     maps_folder = os.path.join(script_dir, 'maps')
-    # Ensure the maps folder exists
     os.makedirs(maps_folder, exist_ok=True)
-    # Define the file name in the maps folder
     file_name = os.path.join(maps_folder, f'map{map_counter}.txt')
 
     with open(file_name, 'w') as f:
@@ -54,9 +49,5 @@ def CheckMultipleMaxes(smoothed_map):
     max_val = flattened_map.max()
     return flattened_map[flattened_map == max_val]
 
-# Main program execution
 initialize_inputs()
 generate_maps()
-
-
-
