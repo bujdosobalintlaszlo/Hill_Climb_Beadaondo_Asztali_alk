@@ -1,6 +1,6 @@
 import os
 import random
-from tqdm import tqdm  # Import tqdm for the progress bar
+from tqdm import tqdm
 
 class HillClimber:
     def __init__(self, file_number):
@@ -9,7 +9,7 @@ class HillClimber:
         self.global_maxes = []
         self.stepCounter = 0
         self.file_number = file_number
-        self.tabu_list = set()
+        self.tabu_list = set() 
         self.tabu_list_size = 30
 
         current_directory = os.path.dirname(os.path.abspath(__file__))
@@ -63,7 +63,7 @@ class HillClimber:
                 neighbor_value = self.map[nx][ny]
 
                 if (nx, ny) in self.tabu_list and neighbor_value <= best_value:
-                    continue  
+                    continue
 
                 if neighbor_value > best_value:
                     best_value = neighbor_value
@@ -74,10 +74,10 @@ class HillClimber:
                 break
             
             current_x, current_y = next_move
-            self.tabu_list.add((current_x, current_y))  
-            
+            self.tabu_list.add((current_x, current_y))
+
             if len(self.tabu_list) > self.tabu_list_size:
-                self.tabu_list.pop()  
+                self.tabu_list.pop()
 
         if current_value > self.global_max:
             self.global_max = current_value
@@ -91,9 +91,7 @@ class HillClimber:
         cols = len(self.map[0])
         visited = set()
 
-        total_iterations = rows * cols  # Total number of starting positions
-
-        for _ in range(total_iterations):
+        for _ in range(rows * cols):
             x = random.randint(0, rows - 1)
             y = random.randint(0, cols - 1)
 
@@ -103,6 +101,7 @@ class HillClimber:
 
     def save_result(self):
         latest_data = self.read_latest_data(self.file_number)
+        
         if len(latest_data) == 0:
             with open(os.path.join(self.results_directory, f'result{self.file_number}.txt'), 'w') as w:
                 w.write(f'{self.stepCounter}, 1')
@@ -115,6 +114,9 @@ class HillClimber:
         
         with open(os.path.join(self.results_directory, f'result{self.file_number}.txt'), 'w') as w:
             w.write(f'{average_steps:.2f}, {new_simulation_count}')
+
+        self.stepCounter = 0
+
 
     def read_latest_data(self, current_file_number):
         file_path = os.path.join(self.results_directory, f'result{current_file_number}.txt')
@@ -133,21 +135,21 @@ class HillClimber:
         return data
 
 
-# Program execution
 if __name__ == "__main__":
-    total_runs = 200
-    total_maps = 10
+    total_runs = int(input("Hányszor fusson le a szimuláció egy mappra: "))
+    total_maps = int(input("Hány mappra fusson le: "))
 
     for j in range(total_maps):
         current_file_number = j + 1
         climber = HillClimber(current_file_number)
-        
-        # Initialize tqdm for progress tracking for each map
+
         with tqdm(total=total_runs, desc=f"Map {current_file_number}", unit="run") as pbar:
             for i in range(total_runs):
                 climber.find_all_global_maxes()
                 climber.save_result()
                 pbar.update(1)
-                
-    print('A program lefutott.')
 
+        climber.stepCounter = 0
+
+    print('A program lefutott.')
+    input('Ha vissza szeretnél lépni zárd nyomj egy ENTER-t...')
