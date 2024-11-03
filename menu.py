@@ -20,7 +20,8 @@ class MenuFrame(Frame):
             ("Map megjelenítése", 2),
             ("Szimuláció futtatása", 3),
             ("Adatok megtekintése", 4),
-            ("Pont számolása",5)
+            ("Pont számolása",5),
+            ("Resultok ürítése",6)
         ]
         self.list_box = ListBox(3, options)
         layout.add_widget(self.list_box)
@@ -43,19 +44,17 @@ class MenuFrame(Frame):
         elif selected == 3:
             subprocess.run(["python", "algo/hillClimb.py"])
         elif selected == 4:
-            subprocess.run(["python", "mapHandling/displayResult.py"], check=True)
+            subprocess.run(["python", "mapHandling/displayResult.py"])
         elif selected == 5:
             subprocess.run(["python", "mapHandling/results/pointCounter.py"], check=True)
+        elif selected == 6:
+            subprocess.run(["python","mapHandling/results/clearResults.py"])
 
         
         input()
         self.screen.clear()
         self.screen.refresh()
         self.fix()
-
-
-
-
 
     def _exit(self):
         raise StopApplication("User pressed exit")
@@ -64,6 +63,3 @@ def demo(screen):
     screen.play([Scene([MenuFrame(screen)], -1)])
 
 Screen.wrapper(demo)
-
-
-
